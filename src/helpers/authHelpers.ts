@@ -43,7 +43,7 @@ export const getToken = async ({ code }: { code: string }) => {
         grant_type: "authorization_code",
         code: code,
         redirect_uri:
-          process.env.NEXT_PUBLIC_DEPLOY_URL_BASE_PRIMARY ??
+          process.env.NEXT_PUBLIC_DEPLOY_URL_BASE ??
           process.env.NEXT_PUBLIC_LOCAL_URL_BASE ??
           "",
       }),
