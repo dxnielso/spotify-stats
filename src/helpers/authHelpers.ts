@@ -33,7 +33,9 @@ export const getToken = async ({ code }: { code: string }) => {
         grant_type: "authorization_code",
         code: code,
         redirect_uri:
-          process.env.NEXT_PUBLIC_URL_BASE ?? "http://localhost:3000",
+          process.env.NODE_ENV === "development"
+            ? process.env.NEXT_PUBLIC_DEPLOY_URL_BASE_PRIMARY || ""
+            : process.env.NEXT_PUBLIC_LOCAL_URL_BASE || "",
         code_verifier: window.localStorage.getItem("code_verifier") ?? "",
       }),
     };
