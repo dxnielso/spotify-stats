@@ -34,8 +34,8 @@ export const getToken = async ({ code }: { code: string }) => {
         code: code,
         redirect_uri:
           process.env.NODE_ENV === "development"
-            ? process.env.NEXT_PUBLIC_DEPLOY_URL_BASE_PRIMARY || ""
-            : process.env.NEXT_PUBLIC_LOCAL_URL_BASE || "",
+            ? process.env.NEXT_PUBLIC_LOCAL_URL_BASE || ""
+            : process.env.NEXT_PUBLIC_DEPLOY_URL_BASE_PRIMARY || "",
         code_verifier: window.localStorage.getItem("code_verifier") ?? "",
       }),
     };
@@ -79,8 +79,8 @@ export const requestAuthorization = async () => {
     code_challenge: codeChallenge,
     redirect_uri:
       process.env.NODE_ENV === "development"
-        ? process.env.NEXT_PUBLIC_DEPLOY_URL_BASE_PRIMARY || ""
-        : process.env.NEXT_PUBLIC_LOCAL_URL_BASE || "",
+        ? process.env.NEXT_PUBLIC_LOCAL_URL_BASE || ""
+        : process.env.NEXT_PUBLIC_DEPLOY_URL_BASE_PRIMARY || "",
   };
   authUrl.search = new URLSearchParams(params).toString();
 
