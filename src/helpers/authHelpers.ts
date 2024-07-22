@@ -77,7 +77,10 @@ export const requestAuthorization = async () => {
     scope,
     code_challenge_method: "S256",
     code_challenge: codeChallenge,
-    redirect_uri: process.env.NEXT_PUBLIC_URL_BASE ?? "http://localhost:3000",
+    redirect_uri:
+      process.env.NODE_ENV === "development"
+        ? process.env.NEXT_PUBLIC_DEPLOY_URL_BASE_PRIMARY || ""
+        : process.env.NEXT_PUBLIC_LOCAL_URL_BASE || "",
   };
   authUrl.search = new URLSearchParams(params).toString();
 
