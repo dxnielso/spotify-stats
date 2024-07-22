@@ -62,7 +62,7 @@ const UsersTopTracks = () => {
 
   return (
     <section>
-      <h2 className="text-2xl xl:text-3xl font-bold text-white/80 mb-3 xl:mb-5 2xl:mb-7">
+      <h2 className="text-xl xl:text-3xl font-bold text-white/80 mb-5 2xl:mb-7">
         Canciones más escuchadas recientemente
       </h2>
       <ul className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 md:gap-5 w-full">

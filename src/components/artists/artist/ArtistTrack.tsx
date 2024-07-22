@@ -33,7 +33,7 @@ const ArtistTrack = ({
           {track.is_playable && (
             <button
               type="button"
-              className="size-7 outline-none sm:size-8 lg:size-9 bg-primaryColor rounded-full p-2 hover:opacity-80 duration-300"
+              className="size-9 outline-none bg-primaryColor rounded-full p-2 hover:opacity-80 duration-300"
               onClick={() =>
                 handleSetAudio({ url: track.preview_url ?? "", id: track.id })
               }
