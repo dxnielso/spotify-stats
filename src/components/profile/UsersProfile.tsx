@@ -18,26 +18,36 @@ const UsersProfile = () => {
   // Funciones
   const fetchUserProfile = async () => {
     setIsLoading(true);
-    const response = await fetch(
-      `${
-        window.location.origin
-      }/api/currentUsersProfile?accessToken=${window.localStorage.getItem(
-        "access_token"
-      )}`
-    );
-    if (response.ok) {
-      const data = await response.json();
-      setProfile(data);
-      setIsLoading(false);
-    } else {
-      if (response.status == 401) {
-        getRefreshToken();
+
+    try {
+      const response = await fetch(
+        `${
+          window.location.origin
+        }/api/currentUsersProfile?accessToken=${window.localStorage.getItem(
+          "access_token"
+        )}`
+      );
+
+      if (!response.ok) {
+        // Manejar casos de error HTTP
+        if (response.status === 401) {
+          console.log("Refrescando token");
+          await getRefreshToken();
+        } else {
+          // Manejar otros errores HTTP
+          const errorResponse = await response.text(); // Usar text() para manejar posibles respuestas no JSON
+          console.error(`Error HTTP ${response.status}: ${errorResponse}`);
+        }
       } else {
-        const errorResponse = await response.json();
-        console.log(
-          `Nuevo error no documentado: ${errorResponse.status} - ${errorResponse.responseText}`
-        );
+        // Si la respuesta es exitosa, analiza el JSON
+        const data = await response.json();
+        setProfile(data);
       }
+    } catch (error) {
+      // Captura y maneja errores de red u otros errores
+      console.error("Error fetching user profile:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 

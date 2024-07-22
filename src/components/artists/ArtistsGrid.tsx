@@ -17,26 +17,36 @@ const ArtistsGrid = ({ timeRange }: { timeRange: string }) => {
   // Funciones
   const fetchTopArtists = async () => {
     setIsLoading(true);
-    const response = await fetch(
-      `${
-        window.location.origin
-      }/api/topArtists?accessToken=${window.localStorage.getItem(
-        "access_token"
-      )}&timeRange=${timeRange}`
-    );
-    if (response.ok) {
-      const data = await response.json();
-      setArtists(data.items);
-      setIsLoading(false);
-    } else {
-      if (response.status == 401) {
-        getRefreshToken();
+
+    try {
+      const response = await fetch(
+        `${
+          window.location.origin
+        }/api/topArtists?accessToken=${window.localStorage.getItem(
+          "access_token"
+        )}&timeRange=${timeRange}`
+      );
+
+      if (!response.ok) {
+        // Manejar casos de error HTTP
+        if (response.status === 401) {
+          // Caso de token no autorizado, intenta obtener un nuevo token
+          await getRefreshToken();
+        } else {
+          // Manejar otros errores HTTP
+          const errorResponse = await response.text(); // Usar text() para manejar posibles respuestas no JSON
+          console.error(`Error HTTP ${response.status}: ${errorResponse}`);
+        }
       } else {
-        const errorResponse = await response.json();
-        console.log(
-          `Nuevo error no documentado: ${errorResponse.status} - ${errorResponse.responseText}`
-        );
+        // Si la respuesta es exitosa, analiza el JSON
+        const data = await response.json();
+        setArtists(data.items);
       }
+    } catch (error) {
+      // Captura y maneja errores de red u otros errores
+      console.error("Error fetching top artists:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 

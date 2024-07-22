@@ -17,7 +17,7 @@ const ArtistsCard = ({
         <img
           src={artist.images?.[1].url}
           alt={`Imágen de ${artist.name}`}
-          className="size-32 sm:size-36 lg:size-40 xl:size-44 2xl:size-48 rounded-full duration-200 group-hover:opacity-40"
+          className="size-32 sm:size-36 2xl:size-48 rounded-full duration-200 group-hover:opacity-40"
         />
         <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 text-3xl font-bold text-white/60 duration-200 opacity-0 group-hover:opacity-100">
           #{index}

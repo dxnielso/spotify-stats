@@ -116,8 +116,8 @@ export const getRefreshToken = async () => {
         window.location.reload();
       } else {
         if (response.status == 400) {
-          window.localStorage.removeItem("access_token");
-          window.localStorage.removeItem("refresh_token");
+          // window.localStorage.removeItem("access_token");
+          // window.localStorage.removeItem("refresh_token");
           throw new Error("Bad requests: Invalid refresh token");
         }
         throw new Error(`${response.status} - ${response.statusText}`);

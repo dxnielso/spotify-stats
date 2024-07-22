@@ -19,26 +19,36 @@ const ArtistTracks = ({ id }: { id: string }) => {
 
   const fetchArtistTopTracks = async () => {
     setIsLoadingTracks(true);
-    const response = await fetch(
-      `${
-        window.location.origin
-      }/api/artistTopTracks?accessToken=${window.localStorage.getItem(
-        "access_token"
-      )}&id=${id}`
-    );
-    if (response.ok) {
-      const data = await response.json();
-      setTracks(data.tracks);
-      setIsLoadingTracks(false);
-    } else {
-      if (response.status == 401) {
-        getRefreshToken();
+
+    try {
+      const response = await fetch(
+        `${
+          window.location.origin
+        }/api/artistTopTracks?accessToken=${window.localStorage.getItem(
+          "access_token"
+        )}&id=${id}`
+      );
+
+      if (!response.ok) {
+        // Manejar casos de error HTTP
+        if (response.status === 401) {
+          console.log("Refrescando token");
+          await getRefreshToken();
+        } else {
+          // Manejar otros errores HTTP
+          const errorResponse = await response.text(); // Usar text() para manejar posibles respuestas no JSON
+          console.error(`Error HTTP ${response.status}: ${errorResponse}`);
+        }
       } else {
-        const errorResponse = await response.json();
-        console.log(
-          `Nuevo error no documentado: ${errorResponse.status} - ${errorResponse.responseText}`
-        );
+        // Si la respuesta es exitosa, analiza el JSON
+        const data = await response.json();
+        setTracks(data.tracks);
       }
+    } catch (error) {
+      // Captura y maneja errores de red u otros errores
+      console.error("Error fetching artist top tracks:", error);
+    } finally {
+      setIsLoadingTracks(false);
     }
   };
 
