@@ -11,6 +11,16 @@ export const metadata: Metadata = {
   publisher: "Daniel Solis",
 };
 
+console.log("NODE_ENV:", process.env.NODE_ENV);
+console.log(
+  "NEXT_PUBLIC_LOCAL_URL_BASE:",
+  process.env.NEXT_PUBLIC_LOCAL_URL_BASE
+);
+console.log(
+  "NEXT_PUBLIC_DEPLOY_URL_BASE_PRIMARY:",
+  process.env.NEXT_PUBLIC_DEPLOY_URL_BASE_PRIMARY
+);
+
 const Home = () => {
   return (
     <ContentLayout>

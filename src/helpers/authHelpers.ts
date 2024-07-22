@@ -22,6 +22,16 @@ export const base64encode = (input: ArrayBuffer) => {
 };
 
 export const getToken = async ({ code }: { code: string }) => {
+  console.log("NODE_ENV:", process.env.NODE_ENV);
+  console.log(
+    "NEXT_PUBLIC_LOCAL_URL_BASE:",
+    process.env.NEXT_PUBLIC_LOCAL_URL_BASE
+  );
+  console.log(
+    "NEXT_PUBLIC_DEPLOY_URL_BASE_PRIMARY:",
+    process.env.NEXT_PUBLIC_DEPLOY_URL_BASE_PRIMARY
+  );
+
   try {
     const payload = {
       method: "POST",
@@ -33,10 +43,9 @@ export const getToken = async ({ code }: { code: string }) => {
         grant_type: "authorization_code",
         code: code,
         redirect_uri:
-          process.env.NODE_ENV === "development"
-            ? process.env.NEXT_PUBLIC_LOCAL_URL_BASE || ""
-            : process.env.NEXT_PUBLIC_DEPLOY_URL_BASE_PRIMARY || "",
-        code_verifier: window.localStorage.getItem("code_verifier") ?? "",
+          process.env.NEXT_PUBLIC_DEPLOY_URL_BASE_PRIMARY ??
+          process.env.NEXT_PUBLIC_LOCAL_URL_BASE ??
+          "",
       }),
     };
 
@@ -78,9 +87,9 @@ export const requestAuthorization = async () => {
     code_challenge_method: "S256",
     code_challenge: codeChallenge,
     redirect_uri:
-      process.env.NODE_ENV === "development"
-        ? process.env.NEXT_PUBLIC_LOCAL_URL_BASE || ""
-        : process.env.NEXT_PUBLIC_DEPLOY_URL_BASE_PRIMARY || "",
+      process.env.NEXT_PUBLIC_DEPLOY_URL_BASE ??
+      process.env.NEXT_PUBLIC_LOCAL_URL_BASE ??
+      "",
   };
   authUrl.search = new URLSearchParams(params).toString();
 
