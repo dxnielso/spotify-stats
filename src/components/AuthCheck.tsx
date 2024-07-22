@@ -13,13 +13,18 @@ const AuthCheck = ({ children }: { children: React.ReactNode }) => {
 
   // funciones
   const isUserAuthenticated = async () => {
+    console.log("Verificando auth");
+
     if (
       !window.localStorage.getItem("access_token") &&
       !window.localStorage.getItem("refresh_token")
     ) {
       if (!window.localStorage.getItem("code_verifier")) {
+        console.log("No tiene el code_verifier");
         requestAuthorization();
       } else if (new URLSearchParams(window.location.search).get("code")) {
+        console.log("Tiene el codigo en la URL");
+
         const urlParams = new URLSearchParams(window.location.search);
         let code = urlParams.get("code") || "";
         await getToken({

@@ -22,14 +22,13 @@ export const base64encode = (input: ArrayBuffer) => {
 };
 
 export const getToken = async ({ code }: { code: string }) => {
-  console.log("NODE_ENV:", process.env.NODE_ENV);
+  console.log(`Codigo de la URL generado: ${code}`);
   console.log(
-    "NEXT_PUBLIC_LOCAL_URL_BASE:",
-    process.env.NEXT_PUBLIC_LOCAL_URL_BASE
-  );
-  console.log(
-    "NEXT_PUBLIC_DEPLOY_URL_BASE_PRIMARY:",
-    process.env.NEXT_PUBLIC_DEPLOY_URL_BASE_PRIMARY
+    `PRUEBA: ${
+      process.env.NEXT_PUBLIC_DEPLOY_URL_BASE ??
+      process.env.NEXT_PUBLIC_LOCAL_URL_BASE ??
+      ""
+    }`
   );
 
   try {
@@ -46,9 +45,9 @@ export const getToken = async ({ code }: { code: string }) => {
           process.env.NEXT_PUBLIC_DEPLOY_URL_BASE ??
           process.env.NEXT_PUBLIC_LOCAL_URL_BASE ??
           "",
+        code_verifier: window.localStorage.getItem("code_verifier") ?? "",
       }),
     };
-
     const response = await fetch(
       "https://accounts.spotify.com/api/token",
       payload
@@ -60,6 +59,8 @@ export const getToken = async ({ code }: { code: string }) => {
 
       // window.localStorage.setItem("expires_in", data.expires_in);
     } else {
+      const errorMessage = await response.text();
+      console.log(errorMessage);
       throw new Error(`${response.status} ${response.statusText}`);
     }
   } catch (e) {
@@ -69,12 +70,22 @@ export const getToken = async ({ code }: { code: string }) => {
 
 // Funcion para pedir autorizacion login al usuario
 export const requestAuthorization = async () => {
+  console.log("Pedimos autorizacion");
+  console.log(
+    `Variable de entorno: ${
+      process.env.NEXT_PUBLIC_DEPLOY_URL_BASE ??
+      process.env.NEXT_PUBLIC_LOCAL_URL_BASE ??
+      ""
+    }`
+  );
+
   const codeVerifier = generateRandomString(64);
   const hashed = await sha256(codeVerifier);
   const codeChallenge = base64encode(hashed);
 
   // Guardamos
   window.localStorage.setItem("code_verifier", codeVerifier);
+  console.log(`Codigo de verificacion generado: ${codeVerifier}`);
 
   const clientId = process.env.NEXT_PUBLIC_CLIENT_ID || ""; // Aseguramos que sea un string
   const scope = "user-read-private user-read-email user-top-read";
